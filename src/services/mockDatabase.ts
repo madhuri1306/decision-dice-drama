@@ -1,9 +1,7 @@
-
 import { User, Room, Option, Decision, Vote, TiebreakerType, generateMockId, createMockUser } from "../models/types";
 
 // Mock users
 const mockUsers: User[] = [
-  createMockUser("Alice Cooper"),
   createMockUser("Bob Smith"),
   createMockUser("Charlie Brown"),
   createMockUser("Diana Prince"),
@@ -30,7 +28,7 @@ const mockRooms: Room[] = [
     creatorId: mockUsers[1].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
     isOpen: false,
-    participants: [mockUsers[1].id, mockUsers[2].id, mockUsers[3].id, mockUsers[4].id]
+    participants: [mockUsers[1].id, mockUsers[2].id, mockUsers[3].id]
   },
   {
     id: generateMockId(),
@@ -40,7 +38,7 @@ const mockRooms: Room[] = [
     creatorId: mockUsers[2].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
     isOpen: false,
-    participants: [mockUsers[0].id, mockUsers[2].id, mockUsers[4].id]
+    participants: [mockUsers[0].id, mockUsers[2].id, mockUsers[3].id]
   }
 ];
 
@@ -102,7 +100,7 @@ const mockOptionsRoom2: Option[] = [
     id: generateMockId(),
     roomId: mockRooms[1].id,
     text: "The Dark Knight",
-    submittedBy: mockUsers[4].id,
+    submittedBy: mockUsers[3].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 57), // 57 minutes ago
     votes: 1
   }
@@ -113,7 +111,7 @@ const mockOptionsRoom3: Option[] = [
   {
     id: generateMockId(),
     roomId: mockRooms[2].id,
-    text: "Alice",
+    text: "Bob",
     submittedBy: mockUsers[0].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 23), // 23 hours ago
     votes: 0
@@ -130,7 +128,7 @@ const mockOptionsRoom3: Option[] = [
     id: generateMockId(),
     roomId: mockRooms[2].id,
     text: "Evan",
-    submittedBy: mockUsers[4].id,
+    submittedBy: mockUsers[3].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 21), // 21 hours ago
     votes: 2
   }
@@ -157,7 +155,7 @@ const mockDecisions: Decision[] = [
   }
 ];
 
-// Mock votes
+// Mock votes - updated to remove references to Alice
 const mockVotes: Vote[] = [
   // Votes for Room 1
   {
@@ -198,12 +196,6 @@ const mockVotes: Vote[] = [
     roomId: mockRooms[1].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 53) // 53 minutes ago
   },
-  {
-    userId: mockUsers[4].id,
-    optionId: mockOptionsRoom2[3].id,
-    roomId: mockRooms[1].id,
-    createdAt: new Date(Date.now() - 1000 * 60 * 52) // 52 minutes ago
-  },
   
   // Votes for Room 3
   {
@@ -219,21 +211,21 @@ const mockVotes: Vote[] = [
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 21) // 21 hours ago
   },
   {
-    userId: mockUsers[4].id,
+    userId: mockUsers[3].id,
     optionId: mockOptionsRoom3[2].id,
     roomId: mockRooms[2].id,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 21) // 21 hours ago
   }
 ];
 
-// Mock database service
+// Mock database service - we're keeping this simple since we're only focusing on UI
 class MockDatabaseService {
   private users: User[] = [...mockUsers];
   private rooms: Room[] = [...mockRooms];
   private options: Option[] = [...mockOptions];
   private decisions: Decision[] = [...mockDecisions];
   private votes: Vote[] = [...mockVotes];
-  private currentUser: User | null = mockUsers[0]; // Default to first user for demo
+  private currentUser: User | null = mockUsers[0]; // Default to first user (Bob) for demo
 
   // User methods
   async getCurrentUser(): Promise<User | null> {
